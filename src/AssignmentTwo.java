@@ -16,6 +16,9 @@ public class AssignmentTwo {
         rollerCoaster.addVisitorToQueue(visitor1);
         rollerCoaster.addVisitorToQueue(visitor2);
 
+        // 移除游客到排队队列
+        rollerCoaster.removeVisitorFromQueue(visitor1);
+
         // 打印队列
         rollerCoaster.printQueue();
 
