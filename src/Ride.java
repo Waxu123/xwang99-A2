@@ -1,13 +1,14 @@
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 public class Ride implements RideInterface{
     private String rideName;
     private Employee operator;  // 操作员
     private LinkedList<Visitor> queue;  // 排队等候的访客队列（链表）
     private LinkedList<Visitor> rideHistory;  // 已乘坐游乐设施的访客记录（链表）
+
+    private int maxRider;  // 每次循环最多接待的访客数
+    private int numOfCycles;  // 游乐设施运行的周期数
 
     // 默认构造函数
     public Ride() {
@@ -19,6 +20,18 @@ public class Ride implements RideInterface{
         this.operator = operator;
         this.queue = new LinkedList<>();
         this.rideHistory = new LinkedList<>();
+        this.maxRider = maxRider;
+        this.numOfCycles = 0;
+    }
+
+    // 构造器，初始化游乐设施名称和操作员
+    public Ride(String rideName, Employee operator, int maxRider) {
+        this.rideName = rideName;
+        this.operator = operator;
+        this.queue = new LinkedList<>();
+        this.rideHistory = new LinkedList<>();
+        this.maxRider = maxRider;
+        this.numOfCycles = 0;
     }
 
     public String getRideName() {
@@ -43,6 +56,22 @@ public class Ride implements RideInterface{
 
     public List<Visitor> getRideHistory() {
         return rideHistory;
+    }
+
+    public int getMaxRider() {
+        return maxRider;
+    }
+
+    public void setMaxRider(int maxRider) {
+        this.maxRider = maxRider;
+    }
+
+    public int getNumOfCycles() {
+        return numOfCycles;
+    }
+
+    public void setNumOfCycles(int numOfCycles) {
+        this.numOfCycles = numOfCycles;
     }
 
     // 向队列中添加访客
@@ -103,14 +132,74 @@ public class Ride implements RideInterface{
         }
     }
 
+
     // 运行一轮游乐设施（移除队列中的第一个访客，并将其添加到历史记录中）
+    @Override
     public void runOneCycle() {
-        if (!queue.isEmpty()) {
-            Visitor visitor = queue.removeFirst();  // 从队列中移除第一个访客
+        if (operator == null) {
+            System.out.println("无法运行游乐设施 " + rideName + "，没有操作员被分配。");
+            return;
+        }
+
+        if (queue.isEmpty()) {
+            System.out.println("无法运行游乐设施 " + rideName + "，队列中没有访客。");
+            return;
+        }
+
+        // 计算这次循环能够接待的访客数
+        int ridersToProcess = Math.min(maxRider, queue.size());
+
+        // 从队列中移除并将访客添加到历史记录中
+        for (int i = 0; i < ridersToProcess; i++) {
+            Visitor visitor = queue.removeFirst();  // 移除队列中的第一个访客
             addVisitorToHistory(visitor);  // 将访客添加到历史记录中
-            System.out.println(visitor.getName() + " 正在乘坐游乐设施 " + rideName);
-        } else {
-            System.out.println("目前队列中没有访客。");
+        }
+
+        // 增加游乐设施的运行周期数
+        numOfCycles++;
+
+        System.out.println("游乐设施 " + rideName + " 已成功运行一次，当前已运行 " + numOfCycles + " 个周期。");
+    }
+
+
+    //排序
+    public void sortVisitors() {
+        Collections.sort(rideHistory, new VisitorComparator());
+        System.out.println("游乐设施历史记录已排序。");
+    }
+
+    // 导出 Ride 历史记录到文件
+    public void exportRideHistory(String filename) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+            for (Visitor visitor : rideHistory) {
+                writer.write(visitor.toString()); // 将 Visitor 对象的字符串表示写入文件
+                writer.newLine();  // 换行
+            }
+        } catch (IOException e) {
+            System.out.println("导出时发生错误: " + e.getMessage());
         }
     }
+
+//     导入 Ride 历史记录从文件
+    public void importRideHistory(String filename) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // 假设游客信息的格式是 "Name: name, Age: age"
+                String[] parts = line.split(", ");
+                String name = parts[0].split(": ")[1];
+                int age = Integer.parseInt(parts[1].split(": ")[1]);
+                String gender = parts[2].split(": ")[1];
+                String passType = parts[3].split(": ")[1];
+
+                // 创建一个新的 Visitor 对象，并添加到 Ride 中
+                Visitor visitor = new Visitor(name, age, gender, passType);
+                addVisitorToHistory(visitor);
+            }
+            System.out.println("导入成功：" + filename);
+        } catch (IOException e) {
+            System.out.println("发生错误: " + e.getMessage());
+        }
+    }
+
 }

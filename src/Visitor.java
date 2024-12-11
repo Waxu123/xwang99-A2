@@ -23,7 +23,7 @@ public class Visitor extends Person{
 
     @Override
     public String toString() {
-        return super.toString() + ", Pass Type: " + passType;
+        return super.toString() + ", PassType: " + passType;
     }
     
 }
