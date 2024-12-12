@@ -88,13 +88,14 @@ public class Ride implements RideInterface {
     // 从队列中移除访客
     @Override
     public void removeVisitorFromQueue(Visitor visitor) {
+        System.out.println("移除" + visitor.getName());
         queue.remove(visitor);
     }
 
     // 打印当前队列
     @Override
     public void printQueue() {
-        System.out.println("目前排队等待 " + rideName + " 的访客：");
+        System.out.println("目前 " + rideName + " 的访客：");
         for (Visitor visitor : queue) {
             System.out.println(visitor.getName());
         }
@@ -104,7 +105,6 @@ public class Ride implements RideInterface {
     @Override
     public void addVisitorToHistory(Visitor visitor) {
         rideHistory.add(visitor);
-        System.out.println(visitor.getName() + " 已添加到游乐设施历史记录中。");
     }
 
     // 检查访客是否在游乐设施历史记录中
@@ -125,15 +125,25 @@ public class Ride implements RideInterface {
         return rideHistory.size();
     }
 
-    // 打印游乐设施历史记录（所有乘坐过该游乐设施的访客）
+    // 访客记录
     @Override
     public void printRideHistory() {
-        System.out.println("游乐设施 " + rideName + " 的历史记录：");
+        System.out.println("访客记录：");
         //迭代器
         Iterator<Visitor> iterator = rideHistory.iterator();
         while (iterator.hasNext()) {
             Visitor visitor = iterator.next();
             System.out.println(visitor.getName() + " - " + visitor.getPassType());
+        }
+    }
+
+    // 运行一轮游乐设施（移除队列中的第一个访客，并将其添加到历史记录中）
+    public void runOneCycle1() {
+        if (!queue.isEmpty()) {
+            Visitor visitor = queue.removeFirst();  // 从队列中移除第一个访客
+            addVisitorToHistory(visitor);  // 将访客添加到历史记录中
+        } else {
+            System.out.println("目前队列中没有访客。");
         }
     }
 
@@ -170,7 +180,6 @@ public class Ride implements RideInterface {
     //排序
     public void sortVisitors() {
         Collections.sort(rideHistory, new VisitorComparator());
-        System.out.println("游乐设施历史记录已排序。");
     }
 
     // 导出 entity.Ride 历史记录到文件
