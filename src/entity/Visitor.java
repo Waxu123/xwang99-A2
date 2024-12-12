@@ -1,5 +1,8 @@
+package entity;
 
-public class Visitor extends Person{
+import entity.Person;
+
+public class Visitor extends Person {
 
     private String passType;
 

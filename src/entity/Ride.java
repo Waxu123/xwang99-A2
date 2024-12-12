@@ -1,7 +1,12 @@
+package entity;
+
+import Interface.RideInterface;
+import utils.VisitorComparator;
+
 import java.io.*;
 import java.util.*;
 
-public class Ride implements RideInterface{
+public class Ride implements RideInterface {
     private String rideName;
     private Employee operator;  // 操作员
     private LinkedList<Visitor> queue;  // 排队等候的访客队列（链表）
@@ -168,11 +173,11 @@ public class Ride implements RideInterface{
         System.out.println("游乐设施历史记录已排序。");
     }
 
-    // 导出 Ride 历史记录到文件
+    // 导出 entity.Ride 历史记录到文件
     public void exportRideHistory(String filename) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             for (Visitor visitor : rideHistory) {
-                writer.write(visitor.toString()); // 将 Visitor 对象的字符串表示写入文件
+                writer.write(visitor.toString()); // 将 entity.Visitor 对象的字符串表示写入文件
                 writer.newLine();  // 换行
             }
         } catch (IOException e) {
@@ -180,7 +185,7 @@ public class Ride implements RideInterface{
         }
     }
 
-//     导入 Ride 历史记录从文件
+//     导入 entity.Ride 历史记录从文件
     public void importRideHistory(String filename) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
@@ -192,7 +197,7 @@ public class Ride implements RideInterface{
                 String gender = parts[2].split(": ")[1];
                 String passType = parts[3].split(": ")[1];
 
-                // 创建一个新的 Visitor 对象，并添加到 Ride 中
+                // 创建一个新的 entity.Visitor 对象，并添加到 entity.Ride 中
                 Visitor visitor = new Visitor(name, age, gender, passType);
                 addVisitorToHistory(visitor);
             }

@@ -1,5 +1,6 @@
+package entity;
 
-public class Employee extends Person{
+public class Employee extends Person {
     //职位
     private String position;
     //薪水

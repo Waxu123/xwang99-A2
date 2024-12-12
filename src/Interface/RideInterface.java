@@ -1,3 +1,7 @@
+package Interface;
+
+import entity.Visitor;
+
 public interface RideInterface {
     void addVisitorToQueue(Visitor visitor);  // 向队列中添加访客
     void removeVisitorFromQueue(Visitor visitor);  // 从队列中移除访客

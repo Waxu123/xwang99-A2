@@ -1,3 +1,7 @@
+package utils;
+
+import entity.Visitor;
+
 import java.util.Comparator;
 
 public class VisitorComparator implements Comparator<Visitor> {

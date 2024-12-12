@@ -1,3 +1,6 @@
+import entity.Employee;
+import entity.Ride;
+import entity.Visitor;
 
 public class AssignmentTwo {
 
@@ -159,7 +162,7 @@ public class AssignmentTwo {
         Visitor visitor4 = new Visitor("赵六", 27, "女", "成人票");
         Visitor visitor5 = new Visitor("小明", 24, "男", "成人票");
 
-        // 将这些游客添加到 Ride 中
+        // 将这些游客添加到 entity.Ride 中
         rollerCoaster.addVisitorToQueue(visitor1);
         rollerCoaster.addVisitorToQueue(visitor2);
         rollerCoaster.addVisitorToQueue(visitor3);
@@ -169,7 +172,7 @@ public class AssignmentTwo {
         // 运行一次游乐设施
         rollerCoaster.runOneCycle();
 
-        // 导出 Ride 历史记录到文件
+        // 导出 entity.Ride 历史记录到文件
         String filename = "ride_history.txt";
         rollerCoaster.exportRideHistory(filename);
     }
@@ -189,7 +192,7 @@ public class AssignmentTwo {
         System.out.println("导入的游客数量: " + rollerCoaster.getRideHistory().size());
 
         // 打印所有游客的信息
-        System.out.println("Visitor details:");
+        System.out.println("entity.Visitor details:");
         for (Visitor visitor : rollerCoaster.getRideHistory()) {
             System.out.println(visitor);
         }
